@@ -1,0 +1,9 @@
+#!/usr/bin/python
+from apt_venv import AptVenv, utils
+
+utils.DEBUG_LEVEL = 3
+
+a = AptVenv('unstable')
+
+a.delete()
+a.create()
