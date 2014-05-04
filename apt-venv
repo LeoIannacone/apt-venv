@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import os
+from xdg import BaseDirectory
 from apt_venv import AptVenv, utils, VERSION
 from argparse import ArgumentParser
 
@@ -13,7 +14,9 @@ def main():
         default=False, help="delete venv for release")
     parser.add_argument('-c', '--command',
         help="exec the command in venv")
-    parser.add_argument('release',
+    parser.add_argument('-l', '--list', action="store_true",
+        help="list venv on your system")
+    parser.add_argument('release', nargs='?',
         help="the debian/ubuntu release")
 
     args = parser.parse_args()
@@ -24,6 +27,16 @@ def main():
 
     if args.debug:
         utils.DEBUG_LEVEL = args.debug
+
+    if args.list:
+        data_path = BaseDirectory.save_data_path('apt-venv')
+        dirs = os.listdir(data_path)
+        if len(dirs) > 0:
+            print("Installed apt-venv:\n %s" % "\n ".join(dirs))
+            exit(0)
+        else:
+            print("There is no apt-venv on your system")
+            exit(1)
 
     try:
         venv = AptVenv(args.release)
