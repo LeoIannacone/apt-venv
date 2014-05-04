@@ -1,10 +1,35 @@
 #!/usr/bin/python
-from apt_venv import AptVenv, utils
+from apt_venv import AptVenv, utils, VERSION
+from argparse import ArgumentParser
 
-utils.DEBUG_LEVEL = 3
+def main():
+    parser = ArgumentParser(prog='apt-venv')
+    parser.add_argument('-D', '--debug', type=int, help='set debug level')
+    parser.add_argument('-v', '--version', action='version', \
+        version='%(prog)s ' + VERSION)
 
-a = AptVenv('unstable')
+    parser.add_argument('-d', '--delete', action="store_true",
+        default=False, help="delete venv for distribution")
+    parser.add_argument('-c', '--command',
+        help="exec the command in venv")
+    parser.add_argument('release',
+        help="the debian/ubuntu release")
 
-a.delete()
-a.create()
-a.run()
+    args = parser.parse_args()
+
+    if args.debug:
+        utils.DEBUG_LEVEL = args.debug
+
+    try:
+        venv = AptVenv(args.distribution)
+        if args.delete:
+            venv.delete()
+        else:
+            venv.run(command=args.command)
+
+    except Exception as exception:
+        print (str(exception))
+        exit(1)
+
+if __name__ == '__main__':
+    main()
