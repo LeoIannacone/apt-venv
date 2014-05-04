@@ -26,13 +26,13 @@ class AptVenv(object):
         self.config_path = BaseDirectory.save_config_path(self.name)
         self.cache_path = BaseDirectory.save_cache_path(self.name)
         self.data_path = BaseDirectory.save_data_path(self.name)
-        self.config_path = "%s/%s" % (self.config_path, self.release)
-        self.cache_path = "%s/%s" % (self.cache_path, self.release)
-        self.data_path = "%s/%s" % (self.data_path, self.release)
+        self.config_path = os.path.join(self.config_path, self.release)
+        self.cache_path = os.path.join(self.cache_path, self.release)
+        self.data_path = os.path.join(self.data_path, self.release)
 
-        self.bashrc = "%s/%s" % (self.config_path, "bash.rc")
-        self.sourceslist = "%s/%s" % (self.config_path, "sources.list")
-        self.aptconf = "%s/%s" % (self.config_path, "apt.conf")
+        self.bashrc = os.path.join(self.config_path, "bash.rc")
+        self.sourceslist = os.path.join(self.config_path, "sources.list")
+        self.aptconf = os.path.join(self.config_path, "apt.conf")
 
     def exists(self):
         result = True
