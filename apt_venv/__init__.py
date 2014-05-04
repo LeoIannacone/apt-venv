@@ -79,7 +79,7 @@ class AptVenv(object):
     def run(self, command=None):
         bash = 'bash --rcfile %s' % self.bashrc
         if command:
-            bash = '%s -c "%s"' % (bash, command)
+            bash = """bash -c "source %s ; %s" """ % (self.bashrc, command)
         call(bash, shell=True)
 
     def delete(self):
