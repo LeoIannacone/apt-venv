@@ -109,8 +109,6 @@ class AptVenv(object):
         call(bash, shell=True)
 
     def delete(self):
-        if not self.exists():
-            return
         utils.debug(1, "deleting %s" % self.release)
         for directory in [self.config_path, \
             self.cache_path, self.data_path]:
