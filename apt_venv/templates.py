@@ -38,6 +38,6 @@ Dir::Cache "%(cache_path)s";
 """
 
 APT_CONF = \
-"""Dir "%(base)s";
-Dir::State::status "%(base)s/var/lib/dpkg/status";
+"""Dir "%(data_path)s";
+Dir::State::status "%(data_path)s/var/lib/dpkg/status";
 """

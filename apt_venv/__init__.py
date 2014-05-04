@@ -4,6 +4,8 @@ from shutil import rmtree
 from apt_venv import utils
 from subprocess import call
 
+VERSION = '0.1.0'
+
 class AptVenv(object):
     def __init__(self, release):
         self.release = release
@@ -16,22 +18,20 @@ class AptVenv(object):
         elif self.release in self.ubuntu:
             self.distro = 'ubuntu'
         if not self.distro:
-            raise ValueError('Distro %s not valid. Please specify one of:\n' + \
-                "Debian: %s\n" % ', '.join(self.debian) + \
-                "Ubuntu: %s" % ', '.join(self.ubuntu))
+            raise ValueError('Release "%s" not valid.\n' % release + \
+                'Please specify one of:\n' \
+                " [debian] %s\n" % ' - '.join(self.debian) + \
+                " [ubuntu] %s" % ' - '.join(self.ubuntu))
         self.config_path = BaseDirectory.save_config_path(self.name)
         self.cache_path = BaseDirectory.save_cache_path(self.name)
         self.data_path = BaseDirectory.save_data_path(self.name)
         self.config_path = "%s/%s" % (self.config_path, self.release)
         self.cache_path = "%s/%s" % (self.cache_path, self.release)
         self.data_path = "%s/%s" % (self.data_path, self.release)
-        
+
         self.bashrc = "%s/%s" % (self.config_path, "bash.rc")
         self.sourceslist = "%s/%s" % (self.config_path, "sources.list")
         self.aptconf = "%s/%s" % (self.config_path, "apt.conf")
-
-    def check(self):
-        pass
 
     def create(self):
         self.create_base()
@@ -58,7 +58,7 @@ class AptVenv(object):
             "var/lib/dpkg/status"), 'a').close()
 
     def create_apt_conf(self):
-        content = utils.get_template('apt.conf') % {'base': self.data_path}
+        content = utils.get_template('apt.conf') % {'data_path': self.data_path}
         utils.create_file(self.aptconf, content)
 
     def create_sources_list(self):
@@ -77,6 +77,7 @@ class AptVenv(object):
         utils.create_file(self.bashrc, content)
 
     def run(self, command=None):
+        self.create()
         bash = 'bash --rcfile %s' % self.bashrc
         if command:
             bash = """bash -c "source %s ; %s" """ % (self.bashrc, command)
