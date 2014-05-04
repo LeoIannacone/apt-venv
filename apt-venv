@@ -9,7 +9,7 @@ def main():
         version='%(prog)s ' + VERSION)
 
     parser.add_argument('-d', '--delete', action="store_true",
-        default=False, help="delete venv for distribution")
+        default=False, help="delete venv for release")
     parser.add_argument('-c', '--command',
         help="exec the command in venv")
     parser.add_argument('release',
@@ -21,10 +21,15 @@ def main():
         utils.DEBUG_LEVEL = args.debug
 
     try:
-        venv = AptVenv(args.distribution)
+        venv = AptVenv(args.release)
         if args.delete:
             venv.delete()
         else:
+            if not venv.exists():
+                venv.create()
+                print("Welcome to apt virtual enviroment for %s release." % \
+                        venv.release)
+                print("You may want run first \"apt-get update\"")
             venv.run(command=args.command)
 
     except Exception as exception:
