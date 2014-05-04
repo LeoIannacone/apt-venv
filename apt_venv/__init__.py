@@ -6,7 +6,7 @@ from apt_venv import utils
 class AptVenv(object):
     def __init__(self, release):
         self.release = release
-        self.name = 'npm2deb'
+        self.name = 'apt-venv'
         self.debian = ['stable', 'testing', 'unstable', 'experimental']
         self.ubuntu = ['lucid', 'precise', 'saucy', 'trusty', 'utopic']
         self.distro = None
