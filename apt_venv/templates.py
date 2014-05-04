@@ -23,10 +23,12 @@ deb-src http://archive.ubuntu.com/ubuntu/ %(distro)s-updates main universe restr
 """
 
 BASHRC = \
-"""export PATH=%(data_path)s/bin:${PATH}
+"""source /etc/bash.bashrc
+source ${HOME}/.bashrc
+export PATH=%(data_path)s/bin:${PATH}
 export APT_CONFIG=%(aptconf)s
 export APT_VENV=True
-export PS1="(apt-venv %(release)s) $PS1"
+export PS1="(apt-venv %(release)s) ${PS1}"
 """
 
 APT_CONF = \

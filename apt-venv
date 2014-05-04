@@ -7,3 +7,4 @@ a = AptVenv('unstable')
 
 a.delete()
 a.create()
+a.run()

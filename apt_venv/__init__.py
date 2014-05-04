@@ -2,6 +2,7 @@ import os
 from xdg import BaseDirectory
 from shutil import rmtree
 from apt_venv import utils
+from subprocess import call
 
 class AptVenv(object):
     def __init__(self, release):
@@ -48,6 +49,8 @@ class AptVenv(object):
             "etc/apt/apt.conf.d"))
         os.makedirs(os.path.join(self.data_path, \
             "etc/apt/preferences.d"))
+        os.symlink('/etc/apt/trusted.gpg', \
+            os.path.join(self.data_path, 'etc/apt/trusted.gpg'))
         os.makedirs(os.path.join(self.data_path, \
             "var/lib/dpkg"))
         open(os.path.join(self.data_path, \
@@ -74,7 +77,7 @@ class AptVenv(object):
         utils.create_file(self.bashrc, content)
 
     def run(self):
-        pass
+        call('bash --rcfile %s' % self.bashrc, shell=True)
 
     def delete(self):
         for directory in [self.config_path, \
