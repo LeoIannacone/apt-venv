@@ -18,6 +18,8 @@ def get_template(filename):
         result = templates.BASHRC
     elif filename == 'apt.conf':
         result = templates.APT_CONF
+    elif filename == 'FAKE_SU':
+        return templates.FAKE_SU
     return result
 
 def create_file(filename, content):

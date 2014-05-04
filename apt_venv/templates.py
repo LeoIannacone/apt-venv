@@ -41,3 +41,9 @@ APT_CONF = \
 """Dir "%(data_path)s";
 Dir::State::status "%(data_path)s/var/lib/dpkg/status";
 """
+
+FAKE_SU = \
+"""#!/bin/bash
+echo "Sorry.
+I must prevent you from using sudo or su in apt-venv, modifying system and committing the biggest mistake you will ever make."
+"""

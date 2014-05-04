@@ -1,4 +1,5 @@
 import os
+import stat
 from xdg import BaseDirectory
 from shutil import rmtree
 from apt_venv import utils
@@ -43,6 +44,7 @@ class AptVenv(object):
     def create(self):
         utils.debug(1, "creating %s" % self.release)
         self.create_base()
+        self.create_bin()
         self.create_apt_conf()
         self.create_sources_list()
         self.create_bashrc()
@@ -64,6 +66,17 @@ class AptVenv(object):
         # touch dpkg status
         utils.create_file(os.path.join(self.data_path, \
             "var/lib/dpkg/status"), '')
+
+    def create_bin(self):
+        bin_dir = os.path.join(self.data_path, 'bin')
+        utils.create_dir(bin_dir)
+        content = utils.get_template('FAKE_SU')
+        bin_fakesu = os.path.join(bin_dir, '__apt-venv_fake_su')
+        utils.create_file(bin_fakesu, content)
+        # chmod +x bin_fakesu
+        os.chmod(bin_fakesu, os.stat(bin_fakesu).st_mode | stat.S_IEXEC)
+        for link in ['sudo', 'su']:
+            utils.create_symlink(bin_fakesu, os.path.join(bin_dir, link))
 
     def create_apt_conf(self):
         content = utils.get_template('apt.conf') % {'data_path': self.data_path}
