@@ -33,6 +33,12 @@ class AptVenv(object):
         self.sourceslist = "%s/%s" % (self.config_path, "sources.list")
         self.aptconf = "%s/%s" % (self.config_path, "apt.conf")
 
+    def exists(self):
+        result = True
+        for myfile in [self.bashrc, self.aptconf, self.sourceslist]:
+            result = result and os.path.isfile(myfile)
+        return result
+
     def create(self):
         self.create_base()
         self.create_apt_conf()
@@ -77,7 +83,8 @@ class AptVenv(object):
         utils.create_file(self.bashrc, content)
 
     def run(self, command=None):
-        self.create()
+        if not self.exists():
+            self.create()
         bash = 'bash --rcfile %s' % self.bashrc
         if command:
             bash = """bash -c "source %s ; %s" """ % (self.bashrc, command)
