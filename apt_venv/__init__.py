@@ -51,6 +51,8 @@ class AptVenv(object):
 
     def create_base(self):
         utils.create_dir(self.config_path)
+        utils.create_dir(os.path.join(self.data_path,\
+            'var/log/apt'))
         utils.create_dir(os.path.join(self.data_path, \
             "var/lib/apt/lists/partial"))
         utils.create_dir(os.path.join(self.data_path, \
