@@ -19,8 +19,11 @@ class AptVenv(object):
         elif self.release in self.ubuntu:
             self.distro = 'ubuntu'
         if not self.distro:
-            raise ValueError('Release "%s" not valid.\n' % release + \
-                'Please specify one of:\n' \
+            base  = "Release \"%s\" not valid." % self.release
+            if not self.release:
+                base = "Release not declared."
+            raise ValueError(base + \
+                "\nPlease specify one of:\n" \
                 " [debian] %s\n" % ' - '.join(self.debian) + \
                 " [ubuntu] %s" % ' - '.join(self.ubuntu))
         self.config_path = BaseDirectory.save_config_path(self.name)
@@ -102,11 +105,14 @@ class AptVenv(object):
     def run(self, command=None):
         if not self.exists():
             self.create()
-        bash = 'bash --rcfile %s' % self.bashrc
+        bash = "bash --rcfile %s" % self.bashrc
         if command:
             bash = """bash -c "source %s ; %s" """ % (self.bashrc, command)
         utils.debug(1, "running \"%s\"" % bash)
         call(bash, shell=True)
+
+    def update(self):
+        self.run(command="apt-get update")
 
     def delete(self):
         utils.debug(1, "deleting %s" % self.release)

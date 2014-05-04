@@ -10,12 +10,14 @@ def main():
     parser.add_argument('-v', '--version', action='version', \
         version='%(prog)s ' + VERSION)
 
-    parser.add_argument('-d', '--delete', action="store_true",
-        default=False, help="delete venv for release")
     parser.add_argument('-c', '--command',
         help="exec the command in venv")
+    parser.add_argument('-d', '--delete', action="store_true",
+        default=False, help="delete venv for release")
     parser.add_argument('-l', '--list', action="store_true",
         help="list venv on your system")
+    parser.add_argument('-u', '--update', action="store_true",
+        help="run apt-get update in venv")
     parser.add_argument('release', nargs='?',
         help="the debian/ubuntu release")
 
@@ -48,7 +50,10 @@ def main():
                 print("Welcome to apt virtual enviroment for %s release." % \
                         venv.release)
                 print("You may want run first \"apt-get update\"")
-            venv.run(command=args.command)
+            if args.update:
+                venv.update()
+            else:
+                venv.run(command=args.command)
 
     except ValueError as exception:
         print (str(exception))
