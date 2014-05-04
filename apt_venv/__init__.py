@@ -36,6 +36,7 @@ class AptVenv(object):
         self.create_base()
         self.create_apt_conf()
         self.create_sources_list()
+        self.create_bashrc()
 
     def create_base(self):
         os.makedirs(self.config_path)
@@ -63,6 +64,14 @@ class AptVenv(object):
         link = os.path.join(self.data_path, "etc/apt/sources.list")
         if not os.path.lexists(link):
             os.symlink(self.sourceslist, link)
+
+    def create_bashrc(self):
+        args = {}
+        args['aptconf'] = self.aptconf
+        args['data_path'] = self.data_path
+        args['release'] = self.release
+        content = utils.get_template('bash.rc') % args
+        utils.create_file(self.bashrc, content)
 
     def run(self):
         pass
