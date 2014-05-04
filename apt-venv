@@ -32,7 +32,7 @@ def main():
                 print("You may want run first \"apt-get update\"")
             venv.run(command=args.command)
 
-    except Exception as exception:
+    except ValueError as exception:
         print (str(exception))
         exit(1)
 

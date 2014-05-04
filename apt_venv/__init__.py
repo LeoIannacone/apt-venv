@@ -37,9 +37,11 @@ class AptVenv(object):
         result = True
         for myfile in [self.bashrc, self.aptconf, self.sourceslist]:
             result = result and os.path.isfile(myfile)
+        utils.debug(1, "checking %s: %s" % (self.release, result))
         return result
 
     def create(self):
+        utils.debug(1, "creating %s" % self.release)
         self.create_base()
         self.create_apt_conf()
         self.create_sources_list()
@@ -60,8 +62,8 @@ class AptVenv(object):
         utils.create_dir(os.path.join(self.data_path, \
             "var/lib/dpkg"))
         # touch dpkg status
-        open(os.path.join(self.data_path, \
-            "var/lib/dpkg/status"), 'a').close()
+        utils.create_file(os.path.join(self.data_path, \
+            "var/lib/dpkg/status"), '')
 
     def create_apt_conf(self):
         content = utils.get_template('apt.conf') % {'data_path': self.data_path}
@@ -88,10 +90,15 @@ class AptVenv(object):
         bash = 'bash --rcfile %s' % self.bashrc
         if command:
             bash = """bash -c "source %s ; %s" """ % (self.bashrc, command)
+        utils.debug(1, "running \"%s\"" % bash)
         call(bash, shell=True)
 
     def delete(self):
+        if not self.exists():
+            return
+        utils.debug(1, "deleting %s" % self.release)
         for directory in [self.config_path, \
             self.cache_path, self.data_path]:
             if os.path.isdir(directory):
+                utils.debug(2, "deleting dir %s" % directory)
                 rmtree(directory)

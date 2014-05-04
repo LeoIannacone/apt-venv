@@ -24,15 +24,15 @@ def create_file(filename, content):
     if not os.path.isfile(filename):
         debug(2, "creating file %s" % filename)
         content = u'%s' % content
-        if content[-1] != '\n':
+        if not content or content[-1] != '\n':
             content += '\n'
         with codecs.open(filename, 'w', 'utf-8') as writer:
             writer.write(content)
 
-def create_dir(dir):
-    if not os.path.isdir(dir):
-        debug(2, "creating directory %s" % dir)
-        os.makedirs(dir)
+def create_dir(directory):
+    if not os.path.isdir(directory):
+        debug(2, "creating directory %s" % directory)
+        os.makedirs(directory)
 
 def create_symlink(orig, dest):
     if not os.path.lexists(dest):
