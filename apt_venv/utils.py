@@ -31,6 +31,11 @@ def create_file(filename, content):
         with codecs.open(filename, 'w', 'utf-8') as writer:
             writer.write(content)
 
+def touch_file(filename):
+    if not os.path.isfile(filename):
+        debug(2, "touching file %s" % filename)
+        open(filename, 'a').close()
+
 def create_dir(directory):
     if not os.path.isdir(directory):
         debug(2, "creating directory %s" % directory)

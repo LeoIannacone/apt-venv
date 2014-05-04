@@ -64,8 +64,8 @@ class AptVenv(object):
         utils.create_dir(os.path.join(self.data_path, \
             "var/lib/dpkg"))
         # touch dpkg status
-        utils.create_file(os.path.join(self.data_path, \
-            "var/lib/dpkg/status"), '')
+        utils.touch_file(os.path.join(self.data_path, \
+            "var/lib/dpkg/status"))
 
     def create_bin(self):
         bin_dir = os.path.join(self.data_path, 'bin')
