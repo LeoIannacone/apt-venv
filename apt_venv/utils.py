@@ -10,7 +10,6 @@ def debug(level, msg):
 
 def get_template(filename):
     result = None
-    print filename
     if filename == 'sources.list_ubuntu':
         result = templates.SOURCES_LIST['ubuntu']
     elif filename == 'sources.list_debian':
@@ -38,9 +37,11 @@ def create_file(filename, content):
         writer.write(content)
 
 def create_dir(dir):
-    debug(2, "creating directory %s" % dir)
-    try:
-        os.mkdir(dir)
-    except OSError as oserror:
-        raise OSError("Error: directory %s already exists." % \
-            (oserror.filename))
+    if not os.path.isdir(dir):
+        debug(2, "creating directory %s" % dir)
+        os.makedirs(dir)
+
+def create_symlink(orig, dest):
+    if not os.path.lexists(dest):
+        debug(2, "creating symlink %s -> %s" % (orig, dest))
+        os.symlink(orig, dest)

@@ -40,19 +40,20 @@ class AptVenv(object):
         self.create_bashrc()
 
     def create_base(self):
-        os.makedirs(self.config_path)
-        os.makedirs(os.path.join(self.data_path, \
+        utils.create_dir(self.config_path)
+        utils.create_dir(os.path.join(self.data_path, \
             "var/lib/apt/lists/partial"))
-        os.makedirs(os.path.join(self.data_path, \
+        utils.create_dir(os.path.join(self.data_path, \
             "var/cache/apt/archives/partial"))
-        os.makedirs(os.path.join(self.data_path, \
+        utils.create_dir(os.path.join(self.data_path, \
             "etc/apt/apt.conf.d"))
-        os.makedirs(os.path.join(self.data_path, \
+        utils.create_dir(os.path.join(self.data_path, \
             "etc/apt/preferences.d"))
-        os.symlink('/etc/apt/trusted.gpg', \
+        utils.create_symlink('/etc/apt/trusted.gpg', \
             os.path.join(self.data_path, 'etc/apt/trusted.gpg'))
-        os.makedirs(os.path.join(self.data_path, \
+        utils.create_dir(os.path.join(self.data_path, \
             "var/lib/dpkg"))
+        # touch dpkg status
         open(os.path.join(self.data_path, \
             "var/lib/dpkg/status"), 'a').close()
 
@@ -64,9 +65,8 @@ class AptVenv(object):
         content = utils.get_template('sources.list_%s' % self.distro)
         content = content % {"distro": self.release}
         utils.create_file(self.sourceslist, content)
-        link = os.path.join(self.data_path, "etc/apt/sources.list")
-        if not os.path.lexists(link):
-            os.symlink(self.sourceslist, link)
+        utils.create_symlink(self.sourceslist, \
+            os.path.join(self.data_path, "etc/apt/sources.list"))
 
     def create_bashrc(self):
         args = {}
@@ -76,8 +76,11 @@ class AptVenv(object):
         content = utils.get_template('bash.rc') % args
         utils.create_file(self.bashrc, content)
 
-    def run(self):
-        call('bash --rcfile %s' % self.bashrc, shell=True)
+    def run(self, command=None):
+        bash = 'bash --rcfile %s' % self.bashrc
+        if command:
+            bash = '%s -c "%s"' % (bash, command)
+        call(bash, shell=True)
 
     def delete(self):
         for directory in [self.config_path, \
