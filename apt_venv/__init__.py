@@ -66,6 +66,8 @@ class AptVenv(object):
             "etc/apt/preferences.d"))
         utils.create_symlink('/etc/apt/trusted.gpg', \
             os.path.join(self.data_path, 'etc/apt/trusted.gpg'))
+        utils.create_symlink('/etc/apt/trusted.gpg.d', \
+            os.path.join(self.data_path, 'etc/apt/trusted.gpg.d'))
         utils.create_dir(os.path.join(self.data_path, \
             "var/lib/dpkg"))
         # touch dpkg status

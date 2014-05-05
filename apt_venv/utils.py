@@ -42,6 +42,6 @@ def create_dir(directory):
         os.makedirs(directory)
 
 def create_symlink(orig, dest):
-    if not os.path.lexists(dest):
+    if os.path.exists(orig) and not os.path.lexists(dest):
         debug(2, "creating symlink %s -> %s" % (orig, dest))
         os.symlink(orig, dest)
