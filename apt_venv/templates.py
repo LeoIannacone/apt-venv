@@ -24,17 +24,11 @@ deb-src http://archive.ubuntu.com/ubuntu/ %(distro)s-updates main universe restr
 
 BASHRC = \
 """source /etc/bash.bashrc
-source ${HOME}/.bashrc
-export PATH=%(data_path)s/bin:${PATH}
-export APT_CONFIG=%(aptconf)s
-export APT_VENV=True
+source "${HOME}/.bashrc"
+export APT_VENV="%(release)s"
+export APT_CONFIG="%(aptconf)s"
+export PATH="%(data_path)s/bin:${PATH}"
 export PS1="(apt-venv %(release)s) ${PS1}"
-"""
-
-APT_CONF = \
-"""Dir::Etc "%(config_path)s";
-Dir:State "%(data_path)s";
-Dir::Cache "%(cache_path)s";
 """
 
 APT_CONF = \
@@ -44,6 +38,7 @@ Dir::State::status "%(data_path)s/var/lib/dpkg/status";
 
 FAKE_SU = \
 """#!/bin/bash
-echo "Sorry.
-I must prevent you from using sudo or su in apt-venv, modifying system and committing the biggest mistake you will ever make."
+echo "Sorry for this.
+I must prevent you from using sudo or su in apt-venv, modifying
+system and committing the biggest mistake you will ever make."
 """

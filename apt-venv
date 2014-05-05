@@ -11,20 +11,20 @@ def main():
         version='%(prog)s ' + VERSION)
 
     parser.add_argument('-c', '--command',
-        help="exec the command in venv")
+        help="exec the given command instead of entry the interactive shell")
     parser.add_argument('-d', '--delete', action="store_true",
         default=False, help="delete venv for release")
     parser.add_argument('-l', '--list', action="store_true",
-        help="list venv on your system")
+        help="list all venv installed in your system")
     parser.add_argument('-u', '--update', action="store_true",
-        help="run apt-get update in venv")
+        help="update the apt indexes")
     parser.add_argument('release', nargs='?',
         help="the debian/ubuntu release")
 
     args = parser.parse_args()
 
-    if 'APT_VENV' in os.environ and os.environ['APT_VENV'] == 'True':
-        print("You can't run apt-venv inside an apt-venv")
+    if 'APT_VENV' in os.environ:
+        print("You can't run apt-venv inside apt-venv session")
         exit(1)
 
     if args.debug:
@@ -47,7 +47,7 @@ def main():
         else:
             if not venv.exists():
                 venv.create()
-                print("Welcome to apt virtual enviroment for %s release." % \
+                print("Welcome to apt virtual environment for %s release." % \
                         venv.release)
                 print("You may want run first \"apt-get update\"")
             if args.update:

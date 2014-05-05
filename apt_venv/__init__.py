@@ -19,11 +19,11 @@ class AptVenv(object):
         elif self.release in self.ubuntu:
             self.distro = 'ubuntu'
         if not self.distro:
-            base  = "Release \"%s\" not valid." % self.release
+            base  = "Release \"%s\" not valid. " % self.release
             if not self.release:
-                base = "Release not declared."
+                base = "No release declared. "
             raise ValueError(base + \
-                "\nPlease specify one of:\n" \
+                "Please specify one of:\n" \
                 " [debian] %s\n" % ' - '.join(self.debian) + \
                 " [ubuntu] %s" % ' - '.join(self.ubuntu))
         self.config_path = BaseDirectory.save_config_path(self.name)
