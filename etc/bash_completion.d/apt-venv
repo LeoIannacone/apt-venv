@@ -1,0 +1,24 @@
+have apt-venv &&
+_apt-venv()
+{
+    local cur prev options
+
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    if [[ "$prev" == "apt-venv" || $prev == -* ]] ; then
+      options="`apt-venv -l | grep ^' '`"
+    else
+      options="-D --debug
+               -c --command
+               -d --delete
+               -u --update"
+    fi
+
+    COMPREPLY=( $( compgen -W "$options" -- $cur ) )
+    return 0
+
+}
+
+complete -F _apt-venv apt-venv
