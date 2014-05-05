@@ -13,7 +13,7 @@ setup(name='apt_venv',
       packages=['apt_venv'],
       data_files=[
         ('share/man/man1', ['man/apt-venv.1']),
-        ('share/doc/npm2deb', ['README.md', 'AUTHORS']),
+        ('share/doc/apt-venv', ['README.md', 'AUTHORS']),
         ('/etc/bash_completion.d', ['etc/bash_completion.d/apt-venv'])
       ],
 )
