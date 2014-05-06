@@ -11,7 +11,7 @@ class AptVenv(object):
     def __init__(self, release):
         self.release = release
         self.name = 'apt-venv'
-        self.debian = ['stable', 'testing', 'unstable', 'experimental']
+        self.debian = ['oldstable', 'stable', 'testing', 'unstable', 'experimental']
         self.ubuntu = ['lucid', 'precise', 'saucy', 'trusty', 'utopic']
         self.distro = None
         if self.release in self.debian:
