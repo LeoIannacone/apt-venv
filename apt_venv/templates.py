@@ -1,7 +1,6 @@
 SOURCES_LIST = {}
 
-SOURCES_LIST['debian'] = \
-"""deb http://http.debian.net/debian %(distro)s main
+SOURCES_LIST['debian'] = """deb http://http.debian.net/debian %(distro)s main
 deb-src http://http.debian.net/debian %(distro)s main
 
 #deb http://http.debian.net/debian %(distro)s-updates main

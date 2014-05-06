@@ -4,9 +4,11 @@ import os
 
 DEBUG_LEVEL = 0
 
+
 def debug(level, msg):
     if level <= DEBUG_LEVEL:
         print(" debug [%s] - %s" % (level, msg))
+
 
 def get_template(filename):
     result = None
@@ -22,26 +24,30 @@ def get_template(filename):
         return templates.FAKE_SU
     return result
 
+
 def create_file(filename, content):
     if not os.path.isfile(filename):
-        debug(2, "creating file %s" % filename)
+        debug(2, "creating file {}".format(filename))
         content = u'%s' % content
         if not content or content[-1] != '\n':
             content += '\n'
         with codecs.open(filename, 'w', 'utf-8') as writer:
             writer.write(content)
 
+
 def touch_file(filename):
     if not os.path.isfile(filename):
-        debug(2, "touching file %s" % filename)
+        debug(2, "touching file {}".format(filename))
         open(filename, 'a').close()
+
 
 def create_dir(directory):
     if not os.path.isdir(directory):
-        debug(2, "creating directory %s" % directory)
+        debug(2, "creating directory {}".format(directory))
         os.makedirs(directory)
+
 
 def create_symlink(orig, dest):
     if os.path.exists(orig) and not os.path.lexists(dest):
-        debug(2, "creating symlink %s -> %s" % (orig, dest))
+        debug(2, "creating symlink {} -> {}".format(orig, dest))
         os.symlink(orig, dest)

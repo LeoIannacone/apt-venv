@@ -7,11 +7,13 @@ from subprocess import call
 
 VERSION = '0.1.0'
 
+
 class AptVenv(object):
     def __init__(self, release):
         self.release = release
         self.name = 'apt-venv'
-        self.debian = ['oldstable', 'stable', 'testing', 'unstable', 'experimental']
+        self.debian = ['oldstable', 'stable', 'testing', 'unstable',
+                       'experimental']
         self.ubuntu = ['lucid', 'precise', 'saucy', 'trusty', 'utopic']
         self.distro = None
         if self.release in self.debian:
@@ -19,7 +21,7 @@ class AptVenv(object):
         elif self.release in self.ubuntu:
             self.distro = 'ubuntu'
         if not self.distro:
-            base  = "Release \"%s\" not valid. " % self.release
+            base = "Release \"{}\" not valid. ".format(self.release)
             if not self.release:
                 base = "No release declared. "
             raise ValueError(base + \
@@ -93,7 +95,8 @@ class AptVenv(object):
         content = utils.get_template('sources.list_%s' % self.distro)
         content = content % {"distro": self.release}
         utils.create_file(self.sourceslist, content)
-        utils.create_symlink(self.sourceslist, \
+        utils.create_symlink(
+            self.sourceslist,
             os.path.join(self.data_path, "etc/apt/sources.list"))
 
     def create_bashrc(self):
@@ -118,8 +121,8 @@ class AptVenv(object):
 
     def delete(self):
         utils.debug(1, "deleting %s" % self.release)
-        for directory in [self.config_path, \
-            self.cache_path, self.data_path]:
+        for directory in [self.config_path,
+                          self.cache_path, self.data_path]:
             if os.path.isdir(directory):
                 utils.debug(2, "deleting dir %s" % directory)
                 rmtree(directory)
