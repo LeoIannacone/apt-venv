@@ -24,7 +24,7 @@ class AptVenv(object):
             base = "Release \"{}\" not valid. ".format(self.release)
             if not self.release:
                 base = "No release declared. "
-            raise ValueError(base + \
+            raise ValueError(base +
                 "Please specify one of:\n" \
                 " [debian] %s\n" % ' - '.join(self.debian) + \
                 " [ubuntu] %s" % ' - '.join(self.ubuntu))
@@ -56,6 +56,7 @@ class AptVenv(object):
 
     def create_base(self):
         utils.create_dir(self.config_path)
+        utils.create_dir(self.cache_path)
         utils.create_dir(os.path.join(self.data_path,\
             'var/log/apt'))
         utils.create_dir(os.path.join(self.data_path, \
@@ -103,6 +104,7 @@ class AptVenv(object):
         args = {}
         args['aptconf'] = self.aptconf
         args['data_path'] = self.data_path
+        args['cache_path'] = self.cache_path
         args['release'] = self.release
         content = utils.get_template('bash.rc') % args
         utils.create_file(self.bashrc, content)
