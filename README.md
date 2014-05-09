@@ -1,13 +1,29 @@
 #apt virtual environment
 
-Fast collect information about packages in different Debian and Ubuntu release.
+Quickly collect information about packages in different Debian and Ubuntu release.
 
-**apt-venv** creates a sort of virtual environments in `$HOME/.local/share/apt-venv`, one for each release, and forces apt to run under some custom option.
+**apt-venv** is a tool which creates a sort of virtual environments in `$HOME/.local/share/apt-venv`, one for each release, forcing apt to run under some bespoke option. It can launch a bash session where apt will think to be on another distro/release. In these sessions a `$APT_VENV` variable is set and points out to the release name in use.
 
-For more information and customization, you want take a look at these files:
+If you want to customize environment you can modify files in:
 ```
 ls $HOME/.config/apt-venv/$release
 ```
+**apt-venv** is already available in Debian repository.
+
+## Use case
+To show which version of some package is in Debian and Ubuntu, simply:
+```
+# init apt database for releases
+for release in unstable stable trusty lucid ; do
+    apt-venv $release -u
+done
+
+# do what you want
+for release in unstable stable trusty lucid ; do
+    apt-venv $release -c "apt-cache madison base-files | grep Source | tail -1"
+done
+```
+If you do not specify **-c** option you will entry an interactive shell.
 
 ##Usage
 ```
@@ -28,18 +44,3 @@ optional arguments:
   -l, --list            list all venv installed in your system
   -u, --update          update the apt indexes
 ```
-##Example
-To know which version of some package is in Debian and Ubuntu:
-```
-# init apt database
-for release in unstable stable trusty lucid ; do
-    apt-venv $release -u
-done
-
-# do what you want
-for release in unstable stable trusty lucid ; do
-    apt-venv $release -c "apt-cache madison base-files | grep Source"
-done
-``` 
-
-If you do not specify **-c** option you will entry an interactive shell.
