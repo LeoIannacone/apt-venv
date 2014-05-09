@@ -5,7 +5,7 @@ from shutil import rmtree
 from apt_venv import utils
 from subprocess import call
 
-VERSION = '0.1.0'
+VERSION = '0.2.1'
 
 
 class AptVenv(object):
@@ -25,9 +25,9 @@ class AptVenv(object):
             if not self.release:
                 base = "No release declared. "
             raise ValueError(base +
-                "Please specify one of:\n" \
-                " [debian] %s\n" % ' - '.join(self.debian) + \
-                " [ubuntu] %s" % ' - '.join(self.ubuntu))
+                             "Please specify one of:\n" +
+                             " [debian] %s\n" % ' - '.join(self.debian) +
+                             " [ubuntu] %s" % ' - '.join(self.ubuntu))
         self.config_path = BaseDirectory.save_config_path(self.name)
         self.cache_path = BaseDirectory.save_cache_path(self.name)
         self.data_path = BaseDirectory.save_data_path(self.name)

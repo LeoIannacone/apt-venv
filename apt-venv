@@ -54,8 +54,8 @@ def main():
             if not venv.exists():
                 venv.create()
                 print(
-                    "Welcome to apt virtual environment for %s release.".format(
-                    venv.release))
+                    "Welcome to apt virtual environment for {} release."
+                    .format(venv.release))
                 print("You may want run first \"apt-get update\"")
             if args.update:
                 venv.update()
