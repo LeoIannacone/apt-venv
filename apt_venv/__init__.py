@@ -57,25 +57,21 @@ class AptVenv(object):
     def create_base(self):
         utils.create_dir(self.config_path)
         utils.create_dir(self.cache_path)
-        utils.create_dir(os.path.join(self.data_path,\
-            'var/log/apt'))
-        utils.create_dir(os.path.join(self.data_path, \
-            "var/lib/apt/lists/partial"))
-        utils.create_dir(os.path.join(self.data_path, \
-            "var/cache/apt/archives/partial"))
-        utils.create_dir(os.path.join(self.data_path, \
-            "etc/apt/apt.conf.d"))
-        utils.create_dir(os.path.join(self.data_path, \
-            "etc/apt/preferences.d"))
-        utils.create_symlink('/etc/apt/trusted.gpg', \
-            os.path.join(self.data_path, 'etc/apt/trusted.gpg'))
-        utils.create_symlink('/etc/apt/trusted.gpg.d', \
-            os.path.join(self.data_path, 'etc/apt/trusted.gpg.d'))
-        utils.create_dir(os.path.join(self.data_path, \
-            "var/lib/dpkg"))
+
+        for directory in ['var/log/apt',
+                          'var/lib/apt/lists/partial',
+                          'var/cache/apt/archives/partial',
+                          'etc/apt/apt.conf.d',
+                          'etc/apt/preferences.d',
+                          'var/lib/dpkg']:
+            utils.create_dir(os.path.join(self.data_path, directory))
+
+        for link in ['etc/apt/trusted.gpg',
+                     'etc/apt/trusted.gpg.d']:
+            utils.create_symlink(os.path.join('/', link),
+                                 os.path.join(self.data_path, link))
         # touch dpkg status
-        utils.touch_file(os.path.join(self.data_path, \
-            "var/lib/dpkg/status"))
+        utils.touch_file(os.path.join(self.data_path, 'var/lib/dpkg/status'))
 
     def create_bin(self):
         bin_dir = os.path.join(self.data_path, 'bin')
