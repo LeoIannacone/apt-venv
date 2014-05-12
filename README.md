@@ -2,13 +2,13 @@
 
 Quickly collect information about packages in different Debian and Ubuntu release.
 
-**apt-venv** is a tool which creates a sort of virtual environments in `$HOME/.local/share/apt-venv`, one for each release, forcing apt to run under some bespoke option. It can launch a bash session where apt will think to be on another distro/release. In these sessions a `$APT_VENV` variable is set and points out to the release name in use.
+**apt-venv** creates a sort of virtual environments in `$HOME/.local/share/apt-venv`, one for each release, where **apt** thinks to be on another distro/release. In these sessions a `$APT_VENV` variable is set and points out the release name in use.
 
 If you want to customize environment you can modify files in:
 ```
 ls $HOME/.config/apt-venv/$release
 ```
-**apt-venv** is already available in Debian repository.
+**apt-venv** is already available in Debian.
 
 ## Use case
 To show which version of some package is in Debian and Ubuntu, simply:

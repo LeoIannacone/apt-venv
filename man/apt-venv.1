@@ -3,13 +3,12 @@
 apt-venv \- apt virtual environment
 .SH SYNOPSIS
 .TP
-\fBapt\-venv\fR [\fB\-D DEBUG\fR] [\fB\-d\fR | \fB\-c COMMAND\fR] \fBrelease\fR
+\fBapt\-venv\fR [\fB\-D DEBUG\fR] [\fB\-d\fR | \fB\-c COMMAND\fR] release
 .TP
-\fBapt\-venv\fR \fB-l\fR
+\fBapt\-venv\fR -l
 .SH DESCRIPTION
-\fBapt-venv\fR is a tool which creates a sort of virtual environments in \fI$HOME/.local/share/apt-venv\fR, one for each release, forcing apt to run under some bespoke option.
+\fBapt-venv\fR creates a sort of virtual environments in \fI$HOME/.local/share/apt-venv\fR, one for each release, where \fBapt\fR thinks to be on another distro/release. In these sessions a \fI$APT_VENV\fR variable is set and points out the release name in use.
 
-It can launch a \fIbash\fR session where apt will think to be on another distro/release. In these sessions a \fI$APT_VENV\fR variable is set and points out to the release name in use.
 .SH "OPTIONS"
 .TP
 \fB\-h\fR, \fB\-\-help\fR
