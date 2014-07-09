@@ -6,7 +6,7 @@ import stat as _stat
 
 from apt_venv import utils
 
-VERSION = '0.2.1'
+VERSION = '0.3.0'
 
 
 class AptVenv(object):
