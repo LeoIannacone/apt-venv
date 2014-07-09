@@ -1,4 +1,5 @@
 from xdg import BaseDirectory as _BaseDirectory
+from argparse import ArgumentParser as _ArgumentParser
 from shutil import rmtree as _rmtree
 from subprocess import call as _call
 import os as _os
