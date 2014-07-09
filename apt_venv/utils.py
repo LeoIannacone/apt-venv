@@ -1,6 +1,6 @@
-from apt_venv import templates
-import codecs
-import os
+from apt_venv import templates as templates
+import codecs as _codecs
+import os as _os
 
 DEBUG_LEVEL = 0
 
@@ -26,28 +26,28 @@ def get_template(filename):
 
 
 def create_file(filename, content):
-    if not os.path.isfile(filename):
+    if not _os.path.isfile(filename):
         debug(2, "creating file {}".format(filename))
         content = u'%s' % content
         if not content or content[-1] != '\n':
             content += '\n'
-        with codecs.open(filename, 'w', 'utf-8') as writer:
+        with _codecs.open(filename, 'w', 'utf-8') as writer:
             writer.write(content)
 
 
 def touch_file(filename):
-    if not os.path.isfile(filename):
+    if not _os.path.isfile(filename):
         debug(2, "touching file {}".format(filename))
         open(filename, 'a').close()
 
 
 def create_dir(directory):
-    if not os.path.isdir(directory):
+    if not _os.path.isdir(directory):
         debug(2, "creating directory {}".format(directory))
-        os.makedirs(directory)
+        _os.makedirs(directory)
 
 
 def create_symlink(orig, dest):
-    if os.path.exists(orig) and not os.path.lexists(dest):
+    if _os.path.exists(orig) and not _os.path.lexists(dest):
         debug(2, "creating symlink {} -> {}".format(orig, dest))
-        os.symlink(orig, dest)
+        _os.symlink(orig, dest)

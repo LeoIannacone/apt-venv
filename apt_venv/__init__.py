@@ -1,9 +1,10 @@
-import os
-import stat
-from xdg import BaseDirectory
-from shutil import rmtree
+from xdg import BaseDirectory as _BaseDirectory
+from shutil import rmtree as _rmtree
+from subprocess import call as _call
+import os as _os
+import stat as _stat
+
 from apt_venv import utils
-from subprocess import call
 
 VERSION = '0.2.1'
 
@@ -28,21 +29,21 @@ class AptVenv(object):
                              "Please specify one of:\n" +
                              " [debian] %s\n" % ' - '.join(self.debian) +
                              " [ubuntu] %s" % ' - '.join(self.ubuntu))
-        self.config_path = BaseDirectory.save_config_path(self.name)
-        self.cache_path = BaseDirectory.save_cache_path(self.name)
-        self.data_path = BaseDirectory.save_data_path(self.name)
-        self.config_path = os.path.join(self.config_path, self.release)
-        self.cache_path = os.path.join(self.cache_path, self.release)
-        self.data_path = os.path.join(self.data_path, self.release)
+        self.config_path = _BaseDirectory.save_config_path(self.name)
+        self.cache_path = _BaseDirectory.save_cache_path(self.name)
+        self.data_path = _BaseDirectory.save_data_path(self.name)
+        self.config_path = _os.path.join(self.config_path, self.release)
+        self.cache_path = _os.path.join(self.cache_path, self.release)
+        self.data_path = _os.path.join(self.data_path, self.release)
 
-        self.bashrc = os.path.join(self.config_path, "bash.rc")
-        self.sourceslist = os.path.join(self.config_path, "sources.list")
-        self.aptconf = os.path.join(self.config_path, "apt.conf")
+        self.bashrc = _os.path.join(self.config_path, "bash.rc")
+        self.sourceslist = _os.path.join(self.config_path, "sources.list")
+        self.aptconf = _os.path.join(self.config_path, "apt.conf")
 
     def exists(self):
         result = True
         for myfile in [self.bashrc, self.aptconf, self.sourceslist]:
-            result = result and os.path.isfile(myfile)
+            result = result and _os.path.isfile(myfile)
         utils.debug(1, "checking %s: %s" % (self.release, result))
         return result
 
@@ -64,28 +65,29 @@ class AptVenv(object):
                           'etc/apt/apt.conf.d',
                           'etc/apt/preferences.d',
                           'var/lib/dpkg']:
-            utils.create_dir(os.path.join(self.data_path, directory))
+            utils.create_dir(_os.path.join(self.data_path, directory))
 
         for link in ['etc/apt/trusted.gpg',
                      'etc/apt/trusted.gpg.d']:
-            utils.create_symlink(os.path.join('/', link),
-                                 os.path.join(self.data_path, link))
+            utils.create_symlink(_os.path.join('/', link),
+                                 _os.path.join(self.data_path, link))
         # touch dpkg status
-        utils.touch_file(os.path.join(self.data_path, 'var/lib/dpkg/status'))
+        utils.touch_file(_os.path.join(self.data_path, 'var/lib/dpkg/status'))
 
     def create_bin(self):
-        bin_dir = os.path.join(self.data_path, 'bin')
+        bin_dir = _os.path.join(self.data_path, 'bin')
         utils.create_dir(bin_dir)
         content = utils.get_template('FAKE_SU')
-        bin_fakesu = os.path.join(bin_dir, '__apt-venv_fake_su')
+        bin_fakesu = _os.path.join(bin_dir, '__apt-venv_fake_su')
         utils.create_file(bin_fakesu, content)
         # chmod +x bin_fakesu
-        os.chmod(bin_fakesu, os.stat(bin_fakesu).st_mode | stat.S_IEXEC)
+        _os.chmod(bin_fakesu, _os.stat(bin_fakesu).st_mode | _stat.S_IEXEC)
         for link in ['sudo', 'su']:
-            utils.create_symlink(bin_fakesu, os.path.join(bin_dir, link))
+            utils.create_symlink(bin_fakesu, _os.path.join(bin_dir, link))
 
     def create_apt_conf(self):
-        content = utils.get_template('apt.conf') % {'data_path': self.data_path}
+        content = utils.get_template('apt.conf')
+        content = content % {'data_path': self.data_path}
         utils.create_file(self.aptconf, content)
 
     def create_sources_list(self):
@@ -94,7 +96,7 @@ class AptVenv(object):
         utils.create_file(self.sourceslist, content)
         utils.create_symlink(
             self.sourceslist,
-            os.path.join(self.data_path, "etc/apt/sources.list"))
+            _os.path.join(self.data_path, "etc/apt/sources.list"))
 
     def create_bashrc(self):
         args = {}
@@ -112,7 +114,7 @@ class AptVenv(object):
         if command:
             bash = """bash -c "source %s ; %s" """ % (self.bashrc, command)
         utils.debug(1, "running \"%s\"" % bash)
-        call(bash, shell=True)
+        _call(bash, shell=True)
 
     def update(self):
         self.run(command="apt-get update")
@@ -121,6 +123,6 @@ class AptVenv(object):
         utils.debug(1, "deleting %s" % self.release)
         for directory in [self.config_path,
                           self.cache_path, self.data_path]:
-            if os.path.isdir(directory):
+            if _os.path.isdir(directory):
                 utils.debug(2, "deleting dir %s" % directory)
-                rmtree(directory)
+                _rmtree(directory)
