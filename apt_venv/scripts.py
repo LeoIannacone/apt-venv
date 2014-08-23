@@ -57,6 +57,9 @@ def main():
                 print(
                     "Welcome to apt virtual environment for {} release."
                     .format(venv.release))
+                print(
+                    "All the configuration is available in {}"
+                    .format(venv.config_path))
                 print("You may want run first \"apt-get update\"")
             if args.update:
                 venv.update()

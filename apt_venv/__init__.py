@@ -3,6 +3,7 @@ from shutil import rmtree as _rmtree
 from subprocess import call as _call
 import os as _os
 import stat as _stat
+from json import load as _loadJSON
 
 from apt_venv import utils
 
@@ -13,22 +14,23 @@ class AptVenv(object):
     def __init__(self, release):
         self.release = release
         self.name = 'apt-venv'
-        self.debian = ['oldstable', 'stable', 'testing', 'unstable',
-                       'experimental']
-        self.ubuntu = ['lucid', 'precise', 'saucy', 'trusty', 'utopic']
+        self.config = _loadJSON(open('/etc/apt-venv.conf'))
+
         self.distro = None
-        if self.release in self.debian:
-            self.distro = 'debian'
-        elif self.release in self.ubuntu:
-            self.distro = 'ubuntu'
+        for distro in self.config['distributions']:
+            if self.release in self.config['distributions'][distro]['releases']:
+                self.distro = distro
         if not self.distro:
             base = "Release \"{}\" not valid. ".format(self.release)
             if not self.release:
                 base = "No release declared. "
+            all_releases = []
+            for distro in sorted(self.config['distributions'].keys()):
+                releases = self.config['distributions'][distro]['releases']
+                all_releases.append(" [%s] %s" % (distro, ' - '.join(releases)))
             raise ValueError(base +
-                             "Please specify one of:\n" +
-                             " [debian] %s\n" % ' - '.join(self.debian) +
-                             " [ubuntu] %s" % ' - '.join(self.ubuntu))
+                             "Please specify one of:\n%s" %
+                             '\n'.join(all_releases))
         self.config_path = _BaseDirectory.save_config_path(self.name)
         self.cache_path = _BaseDirectory.save_cache_path(self.name)
         self.data_path = _BaseDirectory.save_data_path(self.name)
@@ -91,8 +93,8 @@ class AptVenv(object):
         utils.create_file(self.aptconf, content)
 
     def create_sources_list(self):
-        content = utils.get_template('sources.list_%s' % self.distro)
-        content = content % {"distro": self.release}
+        content = self.config['distributions'][self.distro]['sourceslist']
+        content = content % {"release": self.release}
         utils.create_file(self.sourceslist, content)
         utils.create_symlink(
             self.sourceslist,
