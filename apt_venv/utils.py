@@ -12,11 +12,7 @@ def debug(level, msg):
 
 def get_template(filename):
     result = None
-    if filename == 'sources.list_ubuntu':
-        result = templates.SOURCES_LIST['ubuntu']
-    elif filename == 'sources.list_debian':
-        result = templates.SOURCES_LIST['debian']
-    elif filename == 'bash.rc':
+    if filename == 'bash.rc':
         result = templates.BASHRC
     elif filename == 'apt.conf':
         result = templates.APT_CONF
