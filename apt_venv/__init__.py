@@ -7,7 +7,7 @@ from json import load as _loadJSON
 
 from apt_venv import utils
 
-VERSION = '0.3.0'
+VERSION = '1.0.0'
 
 
 class AptVenv(object):
