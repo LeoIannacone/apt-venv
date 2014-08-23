@@ -11,6 +11,7 @@ setup(name='apt_venv',
       license='GNU GPL-3',
       scripts=['apt-venv'],
       packages=['apt_venv'],
+      requires=['pyxdg'],
       data_files=[
           ('share/man/man1', ['man/apt-venv.1']),
           ('share/doc/apt-venv', ['README.md', 'AUTHORS']),
