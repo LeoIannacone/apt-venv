@@ -1,5 +1,6 @@
 from argparse import ArgumentParser as _ArgumentParser
 from xdg import BaseDirectory as _BaseDirectory
+from apt_venv import __appname__
 from apt_venv import VERSION as _VERSION
 from apt_venv import utils as _utils
 from apt_venv import AptVenv as _AptVenv
@@ -7,7 +8,7 @@ import os as _os
 
 
 def main():
-    parser = _ArgumentParser(prog='apt-venv')
+    parser = _ArgumentParser(prog=__appname__)
     parser.add_argument('-D', '--debug', type=int, help='set debug level')
     parser.add_argument('-v', '--version', action='version',
                         version='%(prog)s ' + _VERSION)
@@ -38,7 +39,7 @@ def main():
         _utils.DEBUG_LEVEL = args.debug
 
     if args.list:
-        data_path = _BaseDirectory.save_data_path('apt-venv')
+        data_path = _BaseDirectory.save_data_path(__appname__)
         dirs = _os.listdir(data_path)
         if len(dirs) > 0:
             print("Installed apt-venv:\n %s" % "\n ".join(dirs))
