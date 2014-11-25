@@ -7,14 +7,34 @@ from json import load as _loadJSON
 
 from apt_venv import utils
 
+__appname__ = 'apt-venv'
+
 VERSION = '1.0.0'
+
+CONFIG_LOCATIONS = [
+    '/etc/apt-venv.conf',
+]
 
 
 class AptVenv(object):
+
+    def _load_config_from_files(self):
+        config = {}
+        for fname in CONFIG_LOCATIONS:
+            cf = None
+            try:
+                with open(fname) as fp:
+                    cf = _loadJSON(fp)
+            except:
+                raise
+            if cf is not None:
+                config.update(cf)
+        return config
+
     def __init__(self, release):
         self.release = release
         self.name = 'apt-venv'
-        self.config = _loadJSON(open('/etc/apt-venv.conf'))
+        self.config = self._load_config_from_files()
 
         self.distro = None
         for distro in self.config['distributions']:
