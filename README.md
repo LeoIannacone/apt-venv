@@ -1,4 +1,4 @@
-#apt virtual environment
+# apt virtual environment
 
 Quickly collect information about packages in different Debian and Ubuntu release.
 
@@ -25,7 +25,7 @@ done
 ```
 If you do not specify **-c** option you will entry an interactive shell.
 
-##Usage
+## Usage
 ```
 $ apt-venv -h
 usage: apt-venv [-h] [-D DEBUG] [-v] [-d] [-c COMMAND] [-l] [release]
