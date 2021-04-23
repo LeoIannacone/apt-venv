@@ -16,6 +16,7 @@ setup(name='apt_venv',
           ('share/man/man1', ['man/apt-venv.1']),
           ('share/doc/apt-venv', ['README.md', 'AUTHORS']),
           ('/etc', ['etc/apt-venv.conf']),
-          ('/etc/bash_completion.d', ['etc/bash_completion.d/apt-venv'])
+          ('/usr/share/bash-completion/completions',
+           ['share/bash-completion/completions/apt-venv'])
       ],
       )
